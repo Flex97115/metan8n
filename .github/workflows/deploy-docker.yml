@@ -1,0 +1,36 @@
+name: Deploy Docker Compose
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Substitute environment variables
+        run: |
+          envsubst < ./docker/.env.tpl > ./docker/.env
+        env:
+          ACME_EMAIL: ${{ secrets.ACME_EMAIL }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          DOMAIN_NAME: ${{ secrets.DOMAIN_NAME }}
+
+      - name: Copy docker-compose to server
+        run: |
+          scp -o StrictHostKeyChecking=no ./docker/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/docker/
+
+      - name: Run Docker Compose
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "docker-compose -f /opt/docker/compose.yml -f /opt/docker/compose.prod.yml up -d"

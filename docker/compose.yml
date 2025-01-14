@@ -55,6 +55,8 @@ services:
       - DB_POSTGRESDB_PASSWORD=postgres
     volumes:
       - n8n_data:/home/node/.n8n
+    networks:
+      - default
 
 networks:
   default:
