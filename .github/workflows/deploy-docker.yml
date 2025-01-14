@@ -30,7 +30,7 @@ jobs:
 
       - name: Copy docker-compose to server
         run: |
-          scp -o StrictHostKeyChecking=no ./docker/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/docker/
+          scp -o StrictHostKeyChecking=no -r ./docker/* ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/opt/docker/
 
       - name: Run Docker Compose
         run: |
