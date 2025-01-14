@@ -34,4 +34,4 @@ jobs:
 
       - name: Run Docker Compose
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "docker-compose -f /opt/docker/compose.yml -f /opt/docker/compose.prod.yml up -d"
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} "docker-compose --env-file /opt/docker/.env -f /opt/docker/compose.yml -f /opt/docker/compose.prod.yml up -d"

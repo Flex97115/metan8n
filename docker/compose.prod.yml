@@ -3,8 +3,6 @@ services:
   traefik:
     image: traefik:v3.3.1
     container_name: traefik
-    env_file:
-      - .env
     command:
       - "--api.insecure=false"
       - "--providers.docker=true"
@@ -26,8 +24,6 @@ services:
   metabase:
     image: metabase/metabase:v0.52.4.7
     container_name: metabase
-    env_file:
-      - .env
     environment:
       MB_DB_TYPE: postgres
       MB_DB_DBNAME: metabase
@@ -44,8 +40,6 @@ services:
   postgres:
     image: postgres:17.2
     container_name: postgres
-    env_file:
-      - .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
@@ -56,8 +50,6 @@ services:
   n8n:
     image: docker.n8n.io/n8nio/n8n
     container_name: n8n
-    env_file:
-      - .env
     environment:
       - N8N_PORT=5678
       - N8N_PROTOCOL=https
@@ -69,7 +61,6 @@ services:
       - DB_POSTGRESDB_PASSWORD=${POSTGRES_PASSWORD}
       - NODE_ENV=production
       - WEBHOOK_URL=https://n8n.${DOMAIN_NAME}/
-      - GENERIC_TIMEZONE=${GENERIC_TIMEZONE}
     labels:
       - "traefik.enable=true"
       - "traefik.http.routers.n8n.rule=Host(`n8n.${DOMAIN_NAME}`)"
