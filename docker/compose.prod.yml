@@ -34,8 +34,8 @@ services:
       MB_DB_HOST: postgres
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`metabase.${DOMAIN_NAME}`)"
-      - "traefik.http.routers.metabase.entrypoints=websecure"
+      - "traefik.http.routers.metabase.rule=Host(`metabase.${DOMAIN_NAME}`)"
+      - "traefik.http.routers.metabase.entrypoints=web,websecure"
       - "traefik.http.routers.metabase.tls.certresolver=letsencrypt"
 
   postgres:
